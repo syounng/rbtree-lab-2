@@ -12,13 +12,7 @@ rbtree *new_rbtree(void) {
   return p;
 }
 
-void post_order(rbtree* t, node_t* root) {
-  if(root != t->nil){
-    post_order(t, root->left);
-    post_order(t, root->right);
-    free(root);
-  }
-}
+
 
 void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
@@ -257,11 +251,11 @@ node_t* successor(rbtree* t, node_t* x){ //삭제할 노드의 후계자 찾기
 
 int rbtree_erase(rbtree *t, node_t *z) { //노드 z를 삭제
   // TODO: implement erase
-  node_t* x; //색을 복구할 대상 노드
+  node_t* x; //successor의 색 (실제로 삭제된 노드의 색 -> 얘가 black이면 delete fixup이 실행되고 재조정해야 됨 왜냐면 black depth가 바뀌었으니까. 근데 red였으면 재조정 필요 없음)
   node_t* y = z; //y는 z가 삭제되고 z를 대체할 노드
   color_t y_original_color = y->color; //y의 원래 색상 저장 -> 필요성 : 원래 색이 black인 경우 y를 삭제하거나 이동하면 rbtree의 특성이 위반될 수 있고 이를 rb-delete-fixup을 호출해 수정하기 위해
   
-  if(z->left == t->nil){ //삭제될 z의 왼쪽 자식 노드가 없음
+  if(z->left == t->nil){ //삭제될 z의 왼쪽 자식 노드가 없음 -> 오른쪽 자식 노드도 없다면 nil이 올라오는 것이므로 z가 그냥 삭제되는 것 / 오른쪽 자식 노드가 있다면 z가 삭제되고 그 자리가 오른쪽 자식 노드로 대체되는 것
     x = z->right; 
     rb_transplant(t, z, z->right); //z를 오른쪽 자식으로 교체
 
@@ -301,7 +295,8 @@ int in_order(const rbtree* t, node_t* root, int idx, key_t *arr, size_t n){
   //트리 노드 수가 n보다 적으면 리턴
   if(root != t->nil){
     idx = in_order(t, root->left, idx, arr, n);
-    arr[idx++] = root->key;
+    arr[idx] = root->key;
+    idx=idx+1;
     idx = in_order(t, root->right, idx, arr, n);
   }
   return idx;

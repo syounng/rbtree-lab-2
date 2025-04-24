@@ -31,6 +31,8 @@ void rotate_right(rbtree* t, node_t* node);
 void rotate_left(rbtree* t, node_t* node);
 void print_tree(rbtree *t, node_t* node);
 
+void post_order(rbtree* t, node_t* root);
+
 int rbtree_to_array(const rbtree *, key_t *, const size_t);
 
 #endif  // _RBTREE_H_
