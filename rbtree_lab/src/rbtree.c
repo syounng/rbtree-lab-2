@@ -153,7 +153,8 @@ node_t *rbtree_min(const rbtree *t) {
 node_t *rbtree_max(const rbtree *t) {
   // TODO: implement find
   node_t* x = t->root;
-  node_t* ret = (node_t*)calloc(1, sizeof(node_t));
+  // node_t* ret = (node_t*)calloc(1, sizeof(node_t));
+  node_t* ret;
   ret = x;
 
   if(x == t->nil){
